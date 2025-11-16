@@ -104,7 +104,7 @@ Before running the application, make sure you have the following installed:
 1. Clone the repository
 
 ```bash
-git clone https://github.com/nz-m/SocialEcho.git
+git clone https://github.com/CoolkidSenpai05/AWStest.git
 ```
 2. Go to the project directory and install dependencies for both the client and server
 
