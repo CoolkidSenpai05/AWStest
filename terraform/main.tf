@@ -309,6 +309,10 @@ resource "aws_security_group" "backend_sg" {
 #   key_name   = "deployer-key"
 #   public_key = file("~/.ssh/id_rsa.pub")
 # }
+resource "aws_key_pair" "deployer" {
+  key_name   = "deployer-key"
+  public_key = file("~/.ssh/id_rsa.pub")
+}
 
 # ============================================
 # EC2 INSTANCES
@@ -317,11 +321,12 @@ resource "aws_security_group" "backend_sg" {
 # Frontend EC2 Instance (có Public IP)
 resource "aws_instance" "frontend" {
   ami                    = data.aws_ami.ubuntu.id
-  instance_type          = var.frontend_instance_type
+  instance_type          = "t3.micro"
   subnet_id              = aws_subnet.public_subnet.id
   vpc_security_group_ids = [aws_security_group.frontend_sg.id]
   associate_public_ip_address = true
   # key_name               = aws_key_pair.deployer.key_name  # Uncomment nếu dùng key pair
+  key_name = aws_key_pair.deployer.key_name
 
   user_data = <<-EOF
               #!/bin/bash
@@ -339,11 +344,12 @@ resource "aws_instance" "frontend" {
 # Backend EC2 Instance (không có Public IP)
 resource "aws_instance" "backend" {
   ami                    = data.aws_ami.ubuntu.id
-  instance_type          = var.backend_instance_type
+  instance_type          = "t3.micro"
   subnet_id              = aws_subnet.private_subnet.id
   vpc_security_group_ids = [aws_security_group.backend_sg.id]
   associate_public_ip_address = false
   # key_name               = aws_key_pair.deployer.key_name  # Uncomment nếu dùng key pair
+  key_name = aws_key_pair.deployer.key_name
 
   user_data = <<-EOF
               #!/bin/bash
@@ -370,7 +376,7 @@ data "aws_ami" "ubuntu" {
 
   filter {
     name   = "name"
-    values = ["ubuntu/images/host/ubuntu-22.04-amd64-server-*"]
+    values = ["ubuntu/images/hvm-ssd/ubuntu-jammy-22.04-amd64-server-*"]
   }
 
   filter {
