@@ -2,6 +2,7 @@ const { check, validationResult } = require("express-validator");
 const User = require("../../models/user.model");
 const path = require("path");
 const fs = require("fs");
+const { deleteAvatarFromAzure } = require("../../services/azureBlobService");
 
 const addUserValidator = [
   check("name")
@@ -51,17 +52,24 @@ const addUserValidatorHandler = (req, res, next) => {
     next();
   } else {
     if (req.files && req.files.length > 0) {
-      const { filename } = req.files[0];
-      const filePath = path.join(
-        __dirname,
-        `../../assets/userAvatars/${filename}`
-      );
-      fs.unlink(filePath, (err) => {
-        if (err) {
-          console.error(err);
-        }
-        console.log(`${filePath} was deleted`);
-      });
+      const file = req.files[0];
+      if (file.azureBlobName) {
+        deleteAvatarFromAzure(file.azureBlobName).catch((err) =>
+          console.error("Failed to delete Azure avatar:", err.message)
+        );
+      } else if (file.filename) {
+        const filePath = path.join(
+          __dirname,
+          `../../assets/userAvatars/${file.filename}`
+        );
+        fs.unlink(filePath, (err) => {
+          if (err) {
+            console.error(err);
+          } else {
+            console.log(`${filePath} was deleted`);
+          }
+        });
+      }
     }
     res
       .status(400)

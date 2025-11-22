@@ -292,7 +292,10 @@ const addUser = async (req, res, next) => {
 
   const defaultAvatar =
     "https://raw.githubusercontent.com/nz-m/public-files/main/dp.jpg";
-  const fileUrl = req.files?.[0]?.filename
+  const uploadedAvatarUrl = req.files?.[0]?.azureBlobUrl;
+  const fileUrl = uploadedAvatarUrl
+    ? uploadedAvatarUrl
+    : req.files?.[0]?.filename
     ? `${req.protocol}://${req.get("host")}/assets/userAvatars/${
         req.files[0].filename
       }`

@@ -159,6 +159,18 @@ For content moderation, you need the `PERSPECTIVE_API_KEY` and either the `INTER
 
 If you prefer, the Flask server can be run locally as an alternative to using the Hugging Face Interface API or TextRazor API. Refer to the `classifier_server` directory for more information.
 
+#### Azure Blob Storage (User Avatars)
+
+To store uploaded avatars in Azure Blob Storage (recommended for production), create a Storage Account and add the following variables to `server/.env`:
+
+```bash
+AZURE_STORAGE_CONNECTION_STRING="DefaultEndpointsProtocol=..."
+AZURE_STORAGE_CONTAINER="socialecho-user-avatars"
+```
+
+- The container will be created automatically if it does not exist and will default to `socialecho-user-avatars` when the variable is not set.
+- If these variables are omitted, avatars fall back to being stored on the application server under `server/assets/userAvatars`.
+
 
 >**Note:** Configuration for context-based authentication and content moderation features are **_not mandatory_** to run the application. However, these features will not be available if the configuration is not provided.
 
