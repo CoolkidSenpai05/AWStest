@@ -2,8 +2,6 @@
 
 A social networking platform with automated content moderation and context-based authentication system.
 
-[Watch Demo](https://youtu.be/Tmncayg7FeU)
-
 ![UI-community](https://raw.githubusercontent.com/nz-m/SocialEcho/main/resources/UI-community.png)
 
 ## Table of Contents
@@ -237,11 +235,4 @@ The admin dashboard can be accessed at the `/admin` route. Use the `admin_tool.s
 ### Moderator
 
 Moderators have specific email domain (`@mod.socialecho.com`). When registering with an email from this domain, the user is automatically assigned the moderator role. Moderators can be assigned to different communities from the admin dashboard.
-
-#### Demo
-https://youtu.be/Tmncayg7FeU
-
-## License
-
-This project is licensed under the [MIT License](https://github.com/nz-m/SocialEcho/blob/main/LICENSE).
 
